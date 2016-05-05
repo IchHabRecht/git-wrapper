@@ -1,0 +1,29 @@
+{
+  "name": "ichhabrecht/git-wrapper",
+  "description": "A PHP (read-only) wrapper for the Git command line utility",
+  "keywords": [
+    "Git",
+    "Wrapper",
+    "PHP",
+    "Utility"
+  ],
+  "homepage": "https://github.com/IchHabRecht/git-wrapper",
+  "authors": [
+    {
+      "name": "Nicole Cordes",
+      "role": "Developer",
+      "homepage": "https://twitter.com/IchHabRecht"
+    }
+  ],
+  "license": [
+    "MIT"
+  ],
+  "autoload": {
+    "psr-4": {
+      "IchHabRecht\\GitWrapper\\": "src/GitWrapper"
+    }
+  },
+  "require": {
+    "symfony/process": "^3.0"
+  }
+}
