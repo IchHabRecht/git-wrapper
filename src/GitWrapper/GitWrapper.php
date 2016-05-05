@@ -119,7 +119,7 @@ class GitWrapper
         if (!empty($gitProcess->getExitCode())) {
             throw new \RuntimeException(
                 'Git command "' . $gitCommand->getCommandLine() . '" in "' . $gitCommand->getDirectory() . '" failed with error "' . $gitProcess->getErrorOutput() . '"',
-                1456365593091
+                1456365593
             );
         }
 
