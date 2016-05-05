@@ -37,7 +37,7 @@ class GitRepository
     public function create($cloneUrl, array $options = [], array $arguments = [])
     {
         $arguments[] = $cloneUrl;
-        $arguments[] = $this->directoy;
+        $arguments[] = basename($this->directoy);
         $this->__lastResult = $this->wrapper->execute('clone', $options, $arguments, dirname($this->directoy), null);
 
         return trim($this->__lastResult);
