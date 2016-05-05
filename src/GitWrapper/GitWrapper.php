@@ -123,6 +123,11 @@ class GitWrapper
             );
         }
 
-        return $gitProcess->getOutput();
+        $output = $gitProcess->getOutput();
+        if (empty($output)) {
+            $output = $gitProcess->getErrorOutput();
+        }
+
+        return $output;
     }
 }
