@@ -29,6 +29,14 @@ class GitRepository
     }
 
     /**
+     * @return string
+     */
+    public function getDirectory()
+    {
+        return $this->directoy;
+    }
+
+    /**
      * @param string $cloneUrl
      * @param array $options
      * @param array $arguments
