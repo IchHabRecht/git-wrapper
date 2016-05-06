@@ -95,7 +95,15 @@ class GitCommand
     {
         $options = [];
         foreach ($this->options as $option) {
-            $options[] = (strlen($option) === 1 ? '-' : '--') . $option;
+            if (is_array($option)) {
+                $name = key($option);
+                $value = current($option);
+                $prefix = strlen($name) === 1 ? '-' : '--';
+                $options[] = $prefix . $name .
+                    (!empty($value) ? ($prefix === '-' ? ' ' : '=') . ProcessUtils::escapeArgument($value) : '');
+            } else {
+                $options[] = (strlen($option) === 1 ? '-' : '--') . $option;
+            }
         }
 
         return implode(' ', $options);

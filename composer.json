@@ -18,12 +18,21 @@
   "license": [
     "MIT"
   ],
-  "autoload": {
-    "psr-4": {
-      "IchHabRecht\\GitWrapper\\": "src/GitWrapper"
-    }
-  },
   "require": {
     "symfony/process": "^3.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.8.0",
+    "symfony/filesystem": "^3.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "IchHabRecht\\GitWrapper\\": "src/GitWrapper/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "IchHabRecht\\GitWrapper\\Test\\": "tests/GitWrapper/"
+    }
   }
 }

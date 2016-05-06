@@ -29,6 +29,14 @@ class GitRepository
     }
 
     /**
+     * @return string
+     */
+    public function getDirectory()
+    {
+        return $this->directoy;
+    }
+
+    /**
      * @param string $cloneUrl
      * @param array $options
      * @param array $arguments
@@ -37,7 +45,7 @@ class GitRepository
     public function create($cloneUrl, array $options = [], array $arguments = [])
     {
         $arguments[] = $cloneUrl;
-        $arguments[] = $this->directoy;
+        $arguments[] = basename($this->directoy);
         $this->__lastResult = $this->wrapper->execute('clone', $options, $arguments, dirname($this->directoy), null);
 
         return trim($this->__lastResult);
