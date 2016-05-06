@@ -10,6 +10,8 @@ class GitCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function getCommandLineReturnsCommandDataProvider()
     {
+        $quoteChar = DIRECTORY_SEPARATOR === '\\' ? '"' : '\'';
+
         return [
             'Empty parameter' => [
                 [],
@@ -21,14 +23,14 @@ class GitCommandTest extends \PHPUnit_Framework_TestCase
                     'f',
                     'foo',
                     [
-                        'bar' => 'baz'
+                        'bar' => 'baz',
                     ],
                     [
                         'b' => 'baz',
-                    ]
+                    ],
                 ],
                 [],
-                'test -f --foo --bar="baz" -b "baz"',
+                'test -f --foo --bar=' . $quoteChar . 'baz' . $quoteChar . ' -b ' . $quoteChar . 'baz' . $quoteChar,
             ],
             'Multiple arguments' => [
                 [],
@@ -37,7 +39,7 @@ class GitCommandTest extends \PHPUnit_Framework_TestCase
                     'bar',
                     'baz',
                 ],
-                'test "foo" "bar" "baz"'
+                'test ' . $quoteChar . 'foo' . $quoteChar . ' ' . $quoteChar . 'bar' . $quoteChar . ' ' . $quoteChar . 'baz' . $quoteChar,
             ],
         ];
     }
