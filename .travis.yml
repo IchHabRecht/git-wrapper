@@ -25,6 +25,8 @@ before_install:
   - if [ "$GITHUB_COMPOSER_AUTH" ]; then composer config -g github-oauth.github.com $GITHUB_COMPOSER_AUTH; fi
 
 before_script:
+  - git config --global user.email "typo3@cordes.co"
+  - git config --global user.name "git-wrapper"
   - composer install
 
 script:
