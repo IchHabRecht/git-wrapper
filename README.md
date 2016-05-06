@@ -3,6 +3,7 @@
 A PHP (read-only) wrapper for the Git command line utility.
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/ichhabrecht/git-wrapper.svg)](https://packagist.org/packages/ichhabrecht/git-wrapper)
+[![Build Status](https://img.shields.io/travis/IchHabRecht/git-wrapper/master.svg)](https://travis-ci.org/IchHabRecht/git-wrapper)
 
 ## Installation
 
