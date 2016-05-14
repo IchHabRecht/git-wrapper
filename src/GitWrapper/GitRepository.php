@@ -188,6 +188,6 @@ class GitRepository
      */
     protected function splitOutput($output)
     {
-        return array_map('trim', preg_split("/\\r\\n|\\r|\\n/", $output));
+        return array_filter(array_map('trim', preg_split("/\\r\\n|\\r|\\n/", $output)));
     }
 }
