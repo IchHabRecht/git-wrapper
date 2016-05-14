@@ -52,6 +52,13 @@ class GitRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists(self::LOCAL_REPOSITORY_DIRECTORY . '.git/HEAD');
     }
 
+    public function testBranchReturnsBranches()
+    {
+        $result = $this->gitRemoteRepository->branch();
+
+        $this->assertCount(2, $result);
+    }
+
     public function testCheckoutSwitchesToBranch()
     {
         $result = $this->gitRemoteRepository->checkout([], ['foo']);
