@@ -3,6 +3,8 @@ namespace IchHabRecht\GitWrapper;
 
 class GitRepository
 {
+    const TAG_ORIGIN = 'tags';
+
     /**
      * @var string
      */
@@ -59,6 +61,18 @@ class GitRepository
     public function branch(array $options = [], array $arguments = [])
     {
         $this->__lastResult = $this->wrapper->execute('branch', $options, $arguments, $this->directoy, null);
+
+        return $this->splitOutput($this->__lastResult);
+    }
+
+    /**
+     * @param array $options
+     * @param array $arguments
+     * @return array
+     */
+    public function tag(array $options = [], array $arguments = [])
+    {
+        $this->__lastResult = $this->wrapper->execute('tag', $options, $arguments, $this->directoy, null);
 
         return $this->splitOutput($this->__lastResult);
     }
