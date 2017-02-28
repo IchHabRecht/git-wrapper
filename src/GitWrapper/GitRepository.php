@@ -121,11 +121,24 @@ class GitRepository
             preg_match('{\[(?:ahead (\d+)(?:, )?)?(?:behind (\d+))?\]}', $trackingParts[1], $match);
         }
 
+        $ahead = isset($match[1]) ? (int)$match[1] : 0;
+        $behind = isset($match[2]) ? (int)$match[2] : 0;
+
+        // ahead
+        $aheadLog = $this->getBranchCommitsDiff($remoteBranch, $branch, '%h %s');
+
+        // behind
+        $behindLog = $this->getBranchCommitsDiff($branch, $remoteBranch, '%h %s');
+
         return [
             'branch' => $branch,
             'remoteBranch' => $remoteBranch,
-            'ahead' => isset($match[1]) ? (int)$match[1] : 0,
-            'behind' => isset($match[2]) ? (int)$match[2] : 0,
+            'ahead' => $ahead,
+            'behind' => $behind,
+            'log' => [
+                'ahead' => $aheadLog,
+                'behind' => $behindLog
+            ]
         ];
     }
 
@@ -150,6 +163,34 @@ class GitRepository
         $this->__lastResult = $this->wrapper->execute('log', $options, $arguments, $this->directoy, null);
 
         return trim($this->__lastResult);
+    }
+
+    /**
+     * @param string $branch
+     * @param string $diffBranch
+     * @param string $format https://git-scm.com/docs/pretty-formats
+     * @return array
+     */
+    public function getBranchCommitsDiff($branch, $diffBranch, $format = '%h %s')
+    {
+        $preset = 'format:"'.$format.'"';
+        $result = $this->log(['pretty='.$preset], [$branch.'..'.$diffBranch]);
+
+        $list = $this->splitOutput($result);
+        if (empty($list)) {
+            return [];
+        }
+
+        $commitList = [];
+        foreach ($list as $commit) {
+            list($hash, $message) = explode(' ', $commit,  2);
+            $commitList[] = [
+                'hash' => $hash,
+                'message' => $message,
+            ];
+        }
+
+        return $commitList;
     }
 
     /**
