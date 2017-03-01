@@ -110,6 +110,10 @@ class GitRepository
                 'remoteBranch' => '',
                 'ahead' => 0,
                 'behind' => 0,
+                'log' => [
+                    'ahead' => [],
+                    'behind' => []
+                ]
             ];
         }
 
@@ -123,12 +127,18 @@ class GitRepository
 
         $ahead = isset($match[1]) ? (int)$match[1] : 0;
         $behind = isset($match[2]) ? (int)$match[2] : 0;
+        $aheadLog = [];
+        $behindLog = [];
 
         // ahead
-        $aheadLog = $this->getBranchCommitsDiff($remoteBranch, $branch, '%h %s');
+        if ($ahead > 0) {
+            $aheadLog = $this->getBranchCommitsDiff($remoteBranch, $branch);
+        }
 
         // behind
-        $behindLog = $this->getBranchCommitsDiff($branch, $remoteBranch, '%h %s');
+        if ($behind > 0) {
+            $behindLog = $this->getBranchCommitsDiff($branch, $remoteBranch);
+        }
 
         return [
             'branch' => $branch,
