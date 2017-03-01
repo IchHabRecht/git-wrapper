@@ -87,6 +87,10 @@ class GitRepositoryTest extends \PHPUnit_Framework_TestCase
                 'remoteBranch' => 'origin/master',
                 'ahead' => 0,
                 'behind' => 0,
+                'log' => [
+                    'ahead' => [],
+                    'behind' => []
+                ]
             ],
             $localRepository->getTrackingInformation()
         );
@@ -100,12 +104,19 @@ class GitRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->changeRepository($localRepository);
         $localRepository->fetch();
 
+        $aheadLog = $localRepository->getBranchCommitsDiff('origin/master', 'master');
+        $behindLog = $localRepository->getBranchCommitsDiff('master', 'origin/master');
+
         $this->assertSame(
             [
                 'branch' => 'master',
                 'remoteBranch' => 'origin/master',
                 'ahead' => 1,
                 'behind' => 1,
+                'log' => [
+                    'ahead' => $aheadLog,
+                    'behind' => $behindLog
+                ]
             ],
             $localRepository->getTrackingInformation()
         );
@@ -118,12 +129,18 @@ class GitRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->changeRepository($this->gitRemoteRepository);
         $localRepository->fetch();
 
+        $behindLog = $localRepository->getBranchCommitsDiff('master', 'origin/master');
+
         $this->assertSame(
             [
                 'branch' => 'master',
                 'remoteBranch' => 'origin/master',
                 'ahead' => 0,
                 'behind' => 1,
+                'log' => [
+                    'ahead' => [],
+                    'behind' => $behindLog
+                ]
             ],
             $localRepository->getTrackingInformation()
         );
@@ -136,6 +153,10 @@ class GitRepositoryTest extends \PHPUnit_Framework_TestCase
                 'remoteBranch' => 'origin/master',
                 'ahead' => 0,
                 'behind' => 0,
+                'log' => [
+                    'ahead' => [],
+                    'behind' => []
+                ]
             ],
             $localRepository->getTrackingInformation()
         );
@@ -146,12 +167,18 @@ class GitRepositoryTest extends \PHPUnit_Framework_TestCase
         $localRepository = $this->initializeLocalRepository();
         $this->changeRepository($localRepository);
 
+        $aheadLog = $localRepository->getBranchCommitsDiff('origin/master', 'master');
+
         $this->assertSame(
             [
                 'branch' => 'master',
                 'remoteBranch' => 'origin/master',
                 'ahead' => 1,
                 'behind' => 0,
+                'log' => [
+                    'ahead' => $aheadLog,
+                    'behind' => []
+                ]
             ],
             $localRepository->getTrackingInformation()
         );
@@ -164,6 +191,10 @@ class GitRepositoryTest extends \PHPUnit_Framework_TestCase
                 'remoteBranch' => 'origin/master',
                 'ahead' => 0,
                 'behind' => 0,
+                'log' => [
+                    'ahead' => [],
+                    'behind' => []
+                ]
             ],
             $localRepository->getTrackingInformation()
         );
