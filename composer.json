@@ -25,6 +25,9 @@
     "phpunit/phpunit": "~4.8.0",
     "symfony/filesystem": "^3.0"
   },
+  "suggest": {
+    "friendsofphp/php-cs-fixer": "Tool to automatically fix PHP coding standards issues"
+  },
   "autoload": {
     "psr-4": {
       "IchHabRecht\\GitWrapper\\": "src/GitWrapper/"
