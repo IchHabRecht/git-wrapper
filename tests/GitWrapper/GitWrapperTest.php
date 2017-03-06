@@ -23,7 +23,7 @@ class GitWrapperTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRepositoryReturnsInstance()
     {
-        $directory = tempnam('git-wrapper', 'foo');
+        $directory = @tempnam('git-wrapper', 'foo');
         $repository = $this->gitWrapper->getRepository($directory);
 
         $this->assertInstanceOf(GitRepository::class, $repository);
