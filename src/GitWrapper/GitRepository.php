@@ -3,8 +3,6 @@ namespace IchHabRecht\GitWrapper;
 
 class GitRepository
 {
-    const TAG_ORIGIN = 'tags';
-
     /**
      * @var string
      */
