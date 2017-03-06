@@ -163,8 +163,8 @@ class GitRepository
      */
     public function getBranchCommitsDiff($branch, $diffBranch, $format = '%h %s')
     {
-        $preset = 'format:"'.$format.'"';
-        $result = $this->log(['pretty='.$preset], [$branch.'..'.$diffBranch]);
+        $preset = 'format:"' . $format . '"';
+        $result = $this->log(['pretty=' . $preset], [$branch . '..' . $diffBranch]);
 
         $list = $this->splitOutput($result);
         if (empty($list)) {
@@ -173,7 +173,7 @@ class GitRepository
 
         $commitList = [];
         foreach ($list as $commit) {
-            list($hash, $message) = explode(' ', $commit,  2);
+            list($hash, $message) = explode(' ', $commit, 2);
             $commitList[] = [
                 'hash' => $hash,
                 'message' => $message,
