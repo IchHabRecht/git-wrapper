@@ -110,10 +110,6 @@ class GitRepository
                 'remoteBranch' => '',
                 'ahead' => 0,
                 'behind' => 0,
-                'log' => [
-                    'ahead' => [],
-                    'behind' => []
-                ]
             ];
         }
 
@@ -127,28 +123,12 @@ class GitRepository
 
         $ahead = isset($match[1]) ? (int)$match[1] : 0;
         $behind = isset($match[2]) ? (int)$match[2] : 0;
-        $aheadLog = [];
-        $behindLog = [];
-
-        // ahead
-        if ($ahead > 0) {
-            $aheadLog = $this->getBranchCommitsDiff($remoteBranch, $branch);
-        }
-
-        // behind
-        if ($behind > 0) {
-            $behindLog = $this->getBranchCommitsDiff($branch, $remoteBranch);
-        }
 
         return [
             'branch' => $branch,
             'remoteBranch' => $remoteBranch,
             'ahead' => $ahead,
             'behind' => $behind,
-            'log' => [
-                'ahead' => $aheadLog,
-                'behind' => $behindLog
-            ]
         ];
     }
 
@@ -201,6 +181,37 @@ class GitRepository
         }
 
         return $commitList;
+    }
+
+    /**
+     * @param string $localBranch
+     * @return string
+     */
+    public function getRemoteBranch($localBranch = '')
+    {
+        $branches = $this->branch(['verbose', 'verbose']);
+        // search for a specific remote branch (__ will be replaced with the localBranch name)
+        $specificBranch = '/^[\* ]*__.*?\[([^]]*)\]/';
+        // search for the current remote branch
+        $currentBranch = '/^\*\ .*?\[([^]]*)\]/';
+        if (!empty($localBranch)) {
+            $usedRegex = str_replace('__', str_replace('/', '\/', $localBranch), $specificBranch);
+        } else {
+            $usedRegex = $currentBranch;
+        }
+
+        if (is_array($branches)) {
+            foreach ($branches as $verboseBranchLog) {
+                preg_match($usedRegex, $verboseBranchLog, $matches);
+                if (!empty($matches) && strpos($matches[1], '/') !== false) {
+                    $remoteBranch = explode(':', $matches[1]);
+
+                    return $remoteBranch[0];
+                }
+            }
+        }
+
+        return '';
     }
 
     /**
