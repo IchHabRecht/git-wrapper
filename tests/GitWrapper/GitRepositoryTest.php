@@ -195,7 +195,7 @@ class GitRepositoryTest extends \PHPUnit_Framework_TestCase
                 '1.0.1',
                 '0.3.1-test',
             ],
-            $localRepository->tag(['l', 'sort=-v:refname'])
+            array_reverse($localRepository->tag(['l']))
         );
     }
 
