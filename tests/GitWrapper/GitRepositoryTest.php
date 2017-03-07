@@ -183,7 +183,7 @@ class GitRepositoryTest extends \PHPUnit_Framework_TestCase
         $tagStrings = [
             '0.3.1-test',
             'v1.4.1-rc_34123',
-            '1.0.1'
+            '1.0.1',
         ];
         foreach ($tagStrings as $tagString) {
             $this->gitWrapper->execute('tag', [['a' => $tagString], ['m' => 'Tag Version']], [], $repositoryDirectory);
@@ -193,7 +193,7 @@ class GitRepositoryTest extends \PHPUnit_Framework_TestCase
             [
                 'v1.4.1-rc_34123',
                 '1.0.1',
-                '0.3.1-test'
+                '0.3.1-test',
             ],
             $localRepository->tag(['l', 'sort=-v:refname'])
         );
