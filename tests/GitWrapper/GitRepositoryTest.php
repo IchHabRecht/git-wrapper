@@ -180,22 +180,22 @@ class GitRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $localRepository = $this->initializeLocalRepository();
         $repositoryDirectory = rtrim($localRepository->getDirectory(), '/\\') . '/';
-        $tagStrings = [
+        $tags = [
             '0.3.1-test',
             'v1.4.1-rc_34123',
             '1.0.1',
         ];
-        foreach ($tagStrings as $tagString) {
-            $this->gitWrapper->execute('tag', [['a' => $tagString], ['m' => 'Tag Version']], [], $repositoryDirectory);
+        foreach ($tags as $tag) {
+            $this->gitWrapper->execute('tag', [['a' => $tag], ['m' => 'Tag Version']], [], $repositoryDirectory);
         }
 
         $this->assertSame(
             [
-                'v1.4.1-rc_34123',
-                '1.0.1',
                 '0.3.1-test',
+                '1.0.1',
+                'v1.4.1-rc_34123',
             ],
-            array_reverse($localRepository->tag(['l']))
+            $localRepository->tag(['l'])
         );
     }
 
