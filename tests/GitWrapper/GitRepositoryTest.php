@@ -176,6 +176,29 @@ class GitRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->gitRemoteRepository->hasChanges());
     }
 
+    public function testTagReturnsTags()
+    {
+        $localRepository = $this->initializeLocalRepository();
+        $repositoryDirectory = rtrim($localRepository->getDirectory(), '/\\') . '/';
+        $tags = [
+            '0.3.1-test',
+            'v1.4.1-rc_34123',
+            '1.0.1',
+        ];
+        foreach ($tags as $tag) {
+            $this->gitWrapper->execute('tag', [['a' => $tag], ['m' => 'Tag Version']], [], $repositoryDirectory);
+        }
+
+        $this->assertSame(
+            [
+                '0.3.1-test',
+                '1.0.1',
+                'v1.4.1-rc_34123',
+            ],
+            $localRepository->tag(['l'])
+        );
+    }
+
     /**
      * @return GitRepository
      */
