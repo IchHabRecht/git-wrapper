@@ -133,11 +133,14 @@ class GitRepository
             preg_match('{\[(?:ahead (\d+)(?:, )?)?(?:behind (\d+))?\]}', $trackingParts[1], $match);
         }
 
+        $ahead = isset($match[1]) ? (int)$match[1] : 0;
+        $behind = isset($match[2]) ? (int)$match[2] : 0;
+
         return [
             'branch' => $branch,
             'remoteBranch' => $remoteBranch,
-            'ahead' => isset($match[1]) ? (int)$match[1] : 0,
-            'behind' => isset($match[2]) ? (int)$match[2] : 0,
+            'ahead' => $ahead,
+            'behind' => $behind,
         ];
     }
 
@@ -162,6 +165,65 @@ class GitRepository
         $this->__lastResult = $this->wrapper->execute('log', $options, $arguments, $this->directoy, null);
 
         return trim($this->__lastResult);
+    }
+
+    /**
+     * @param string $branch
+     * @param string $diffBranch
+     * @param string $format https://git-scm.com/docs/pretty-formats
+     * @return array
+     */
+    public function getBranchCommitsDiff($branch, $diffBranch, $format = '%h %s')
+    {
+        $preset = 'format:"' . $format . '"';
+        $result = $this->log(['pretty=' . $preset], [$branch . '..' . $diffBranch]);
+
+        $list = $this->splitOutput($result);
+        if (empty($list)) {
+            return [];
+        }
+
+        $commitList = [];
+        foreach ($list as $commit) {
+            list($hash, $message) = explode(' ', $commit, 2);
+            $commitList[] = [
+                'hash' => $hash,
+                'message' => $message,
+            ];
+        }
+
+        return $commitList;
+    }
+
+    /**
+     * @param string $localBranch
+     * @return string
+     */
+    public function getRemoteBranch($localBranch = '')
+    {
+        $branches = $this->branch(['verbose', 'verbose']);
+        // search for a specific remote branch (__ will be replaced with the localBranch name)
+        $specificBranch = '/^[\* ]*__.*?\[([^]]*)\]/';
+        // search for the current remote branch
+        $currentBranch = '/^\*\ .*?\[([^]]*)\]/';
+        if (!empty($localBranch)) {
+            $usedRegex = str_replace('__', str_replace('/', '\/', $localBranch), $specificBranch);
+        } else {
+            $usedRegex = $currentBranch;
+        }
+
+        if (is_array($branches)) {
+            foreach ($branches as $verboseBranchLog) {
+                preg_match($usedRegex, $verboseBranchLog, $matches);
+                if (!empty($matches) && strpos($matches[1], '/') !== false) {
+                    $remoteBranch = explode(':', $matches[1]);
+
+                    return $remoteBranch[0];
+                }
+            }
+        }
+
+        return '';
     }
 
     /**
